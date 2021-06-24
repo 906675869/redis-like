@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"redis-like/config"
@@ -12,12 +13,16 @@ import (
 )
 
 func main() {
+	log.Println("server starting,env init")
 	// 环境变量配置
 	config.EnvConfigInstance()
+	log.Println("env init success,storage init")
 	// 存储引擎初始化
 	stor := storage.StorageInstance()
+	log.Println("storage init success,protocol starting ...")
 	// 网络初始化
 	server := protocol.Start()
+	log.Println("protocol started ...")
 	// 监听操作系统信号量，优雅退出
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
